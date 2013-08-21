@@ -41,11 +41,48 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+    User.create!({:login => 'publisher',
+                :password => 'aaaaaaaa',
+                :email => 'jim@snow.com',
+                :profile_id => 2,
+                :name => 'publisher',
+                :state => 'active'})
+    Article.create!(:allow_comments => true, 
+                :allow_pings => true, 
+                :author => "Mr Typo", 
+                :body => "This is your second article.", 
+
+                :guid => "1bf3e2ca-ed7b-4562-8a4a-8ce843882222",
+                :id => 2, 
+                :permalink => "bye-world", 
+                :post_type => "read", 
+                :published => true, 
+                :published_at => "2012-06-09 22:51:55 UTC", 
+                :settings => {"password"=>""}, 
+                :state => "published", 
+                :text_filter_id => 5, 
+                :title => "Bye World!", 
+                :type => "Article", 
+                :user_id => 1)
+
+    # Article.find(:all).each { |a| puts("#{a.id}|#{a.title}|#{a.author}|#{a.user_id}|#{a.created_at}|#{a.body}") }
 end
 
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
+  fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+And /^I am  logged in as non-admin$/ do
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'publisher'
   fill_in 'user_password', :with => 'aaaaaaaa'
   click_button 'Login'
   if page.respond_to? :should
