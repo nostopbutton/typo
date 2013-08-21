@@ -7,6 +7,8 @@ db/schema.rb
 .*.swo
 .DS_Store
 .rspec
+submit.txt
+local.txt
 installer/rails_installer.yml
 #/public/files
 #/public/images/theme
